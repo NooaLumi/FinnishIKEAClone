@@ -1,0 +1,40 @@
+.items-display {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.items-display__item {
+	padding: 1rem 1.5rem;
+	border-bottom: 1px solid #dfdfdf;
+}
+
+.items-display__item-image {
+	padding: 0.5rem;
+	width: 100%;
+}
+
+.items-display__item-name {
+	font-size: 0.8rem;
+}
+
+.items-display__item-details {
+	font-size: 0.9rem;
+}
+
+.items-display__item-price {
+	font-weight: bold;
+	padding: 0.5rem 0;
+	font-size: 0.9rem;
+}
+
+.items-display__item-add-button {
+	display: block;
+	cursor: pointer;
+	margin-left: auto;
+	margin-top: -2rem;
+	font-size: 2.3rem;
+	color: white;
+	background-color: var(--color-main);
+	padding: 0.5rem;
+	border-radius: 100%;
+}

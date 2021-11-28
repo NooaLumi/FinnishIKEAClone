@@ -2,6 +2,7 @@ import "./Home.css";
 import { Navigation } from "../components/Navigation";
 import { SearchBar } from "../components/SearchBar";
 import { FilterBar } from "../components/FilterBar";
+import { ItemsDisplay } from "../components/ItemsDisplay";
 import { useState, useEffect, useRef } from "react";
 
 const navStickThreshold = 60;
@@ -11,10 +12,19 @@ const Home = () => {
 	const searchEl = useRef(null);
 	const [stickNav, setStickNav] = useState(false);
 	const [showSearch, setShowSearch] = useState(false);
+	
+	const [items, setItems] = useState([]);
 
 	const navSearchOnClick = (e) => {
 		searchEl.current.focus();
 	};
+
+	useEffect(() => {
+		fetch("/api/items")
+			.then(res => res.json())
+			.then(data => setItems(JSON.parse(data)))
+			.catch(err => console.log(err));
+	}, []);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -55,76 +65,8 @@ const Home = () => {
 				Näytetään hakutulokset haulle <b>"NULL"</b>
 			</h2>
 			<FilterBar stickLower={stickNav} />
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est
-				vitae, similique ipsum voluptate a error quia laborum tenetur
-				quisquam tempora placeat fugit explicabo quas consequuntur
-				aliquid veniam eos in nisi!
-				<br />
-			</p>
+			<ItemsDisplay items={items}/>
+
 		</div>
 	);
 };
