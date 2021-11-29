@@ -1,46 +1,61 @@
-import "./Home.css";
-import { Navigation } from "../components/Navigation";
-import { SearchBar } from "../components/SearchBar";
-import { FilterBar } from "../components/FilterBar";
-import { ItemsDisplay } from "../components/ItemsDisplay";
+import { Navigation } from "../components/organisms/Navigation";
+import { SearchBar } from "../components/molecules/SearchBar";
+import { FilterBar } from "../components/organisms/FilterBar";
+import { ItemsDisplay } from "../components/organisms/ItemsDisplay";
+import {Summary} from "../components/atoms/Summary";
+import {StoreTemplate} from "../templates/StoreTemplate";
+import {getAllItems} from "../API/Items";
+import getCSSVariable from "../utils/getCSSVariable";
+import styled from "styled-components";
+
 import { useState, useEffect, useRef } from "react";
 
-const navStickThreshold = 60;
+const SearchSection = styled.div`
+	margin: 0 calc(var(--margin) * 0.7);
+`
+
+const StyledStorePage = styled(StoreTemplate)`
+`
 
 const Home = () => {
 	const prevScrollY = useRef(0);
 	const searchEl = useRef(null);
 	const [stickNav, setStickNav] = useState(false);
-	const [showSearch, setShowSearch] = useState(false);
+	const [showSearchIcon, setShowSearchIcon] = useState(false);
 	
 	const [items, setItems] = useState([]);
 
-	const navSearchOnClick = (e) => {
+	// Focus on search bar when the menu search icon is clicked
+	const searchIconOnClick = (e) => {
+		document.body.scrollTop = 0; // Safari
+		document.documentElement.scrollTop = 0; 
+
 		searchEl.current.focus();
 	};
 
+	// Fetch items to display
 	useEffect(() => {
-		fetch("/api/items")
-			.then(res => res.json())
-			.then(data => setItems(JSON.parse(data)))
-			.catch(err => console.log(err));
+		getAllItems()
+			.then(items => setItems(items));
 	}, []);
 
+	// Handle sticky display behavior
 	useEffect(() => {
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
 
-			// Set search icon visibility
-			if (currentScrollY > 60) {
-				!showSearch && setShowSearch(true);
+			// Show search icon when scrolled past nav
+			if (currentScrollY > getCSSVariable("--nav-height")) {
+				!showSearchIcon && setShowSearchIcon(true);
 			} else {
-				showSearch && setShowSearch(false);
+				showSearchIcon && setShowSearchIcon(false);
 			}
 
-			// Make nav sticky when scrolling upwards
+			// Remove sticky property when scrolling downwards
 			if (prevScrollY.current < currentScrollY) {
 				stickNav && setStickNav(false);
-			} else if (currentScrollY > navStickThreshold) {
+			// Add sticky property if scrolled past nav 
+			} else if (currentScrollY > getCSSVariable("--nav-height")) {
 				!stickNav && setStickNav(true);
 			}
 
@@ -49,25 +64,24 @@ const Home = () => {
 
 		window.addEventListener("scroll", handleScroll, { passive: true });
 		return () => window.removeEventListener("scroll", handleScroll);
-	}, [stickNav, showSearch]);
+	}, [stickNav, showSearchIcon]);
 
 	return (
-		<div className="home">
-			<div className="home__navigation">
-				<Navigation
-					sticky={stickNav}
-					showSearch={showSearch}
-					searchOnClick={navSearchOnClick}
-				/>
+		<StyledStorePage>
+			<Navigation
+				isSticky={stickNav}
+				showSearchIcon={showSearchIcon}
+				searchIconOnClick={searchIconOnClick}
+			/>
+			<SearchSection>
 				<SearchBar ref={searchEl} />
-			</div>
-			<h2 className="search-summary">
+			</SearchSection>
+			<Summary>
 				Näytetään hakutulokset haulle <b>"NULL"</b>
-			</h2>
+			</Summary>
 			<FilterBar stickLower={stickNav} />
 			<ItemsDisplay items={items}/>
-
-		</div>
+		</StyledStorePage>
 	);
 };
 
