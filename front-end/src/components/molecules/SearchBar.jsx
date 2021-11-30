@@ -64,7 +64,7 @@ const StyledSearchBar = styled.div`
 	}
 `
 
-const SearchBar = React.forwardRef(({className}, ref) => {
+const SearchBar = React.forwardRef(({className, value, onChange}, ref) => {
 	const [isActive, setActive] = useState(false);
 
 	return (
@@ -80,6 +80,8 @@ const SearchBar = React.forwardRef(({className}, ref) => {
 				onFocus={(e) => setActive(true)}
 				onBlur={(e) => setActive(false)}
 				ref={ref}
+				value={value}
+				onChange={onChange}
 			/>
 			{isActive && (
 				<SearchControls>

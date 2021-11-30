@@ -1,12 +1,18 @@
 import { Navigation } from "../components/organisms/Navigation";
+import { NotificationBar} from "../components/organisms/NotificationBar";
 import { SearchBar } from "../components/molecules/SearchBar";
 import { FilterBar } from "../components/organisms/FilterBar";
 import { ItemsDisplay } from "../components/organisms/ItemsDisplay";
 import {Summary} from "../components/atoms/Summary";
 import {StoreTemplate} from "../templates/StoreTemplate";
 import {getAllItems} from "../API/Items";
+import {getItemsCount} from "../API/ShoppingCart";
 import getCSSVariable from "../utils/getCSSVariable";
 import styled from "styled-components";
+import ShoppingCartContext from "../contexts/ShoppingCartContext";
+import useDelayedValue from "../hooks/DelayedValue";
+import {SelectionBox} from "../components/molecules/SelectionBox";
+import {RadioButton} from "../components/atoms/RadioButton";
 
 import { useState, useEffect, useRef } from "react";
 
@@ -22,8 +28,12 @@ const Home = () => {
 	const searchEl = useRef(null);
 	const [stickNav, setStickNav] = useState(false);
 	const [showSearchIcon, setShowSearchIcon] = useState(false);
-	
+	const [itemCount, setItemCount] = useState(getItemsCount);
 	const [items, setItems] = useState([]);
+	const [notifications, setNotifications] = useState([]);
+	const [query, setQuery] = useState("");
+
+	const delayedQuery = useDelayedValue(query, 400);
 
 	// Focus on search bar when the menu search icon is clicked
 	const searchIconOnClick = (e) => {
@@ -32,6 +42,23 @@ const Home = () => {
 
 		searchEl.current.focus();
 	};
+
+	const onQueryChange = e => setQuery(e.target.value);
+
+	const filteredItems = items.filter(i => 
+			i.name.toLowerCase().includes(delayedQuery.toLowerCase())
+			|| i.type.toLowerCase().includes(delayedQuery.toLowerCase()));
+
+	const itemAdded = (item) => {
+		setItemCount(itemCount + 1);
+
+		/*
+		setNotifications([...notifications, {
+			link: "#",
+			message: `${item.name} lisätty ostoskoriin.`
+		}])
+		*/
+	}
 
 	// Fetch items to display
 	useEffect(() => {
@@ -68,19 +95,31 @@ const Home = () => {
 
 	return (
 		<StyledStorePage>
-			<Navigation
-				isSticky={stickNav}
-				showSearchIcon={showSearchIcon}
-				searchIconOnClick={searchIconOnClick}
-			/>
-			<SearchSection>
-				<SearchBar ref={searchEl} />
-			</SearchSection>
-			<Summary>
-				Näytetään hakutulokset haulle <b>"NULL"</b>
-			</Summary>
-			<FilterBar stickLower={stickNav} />
-			<ItemsDisplay items={items}/>
+			<ShoppingCartContext.Provider value={{itemCount, itemAdded}}>
+				<NotificationBar notifications={notifications} setNotifications={setNotifications} />
+				<Navigation
+					isSticky={stickNav}
+					showSearchIcon={showSearchIcon}
+					searchIconOnClick={searchIconOnClick}
+				/>
+				<SearchSection>
+					<SearchBar ref={searchEl} onChange={onQueryChange} value={query} />
+				</SearchSection>
+				{delayedQuery && 
+					<Summary>
+						Näytetään hakutulokset haulle <b>"{delayedQuery}"</b>
+					</Summary>
+				}
+				<FilterBar stickLower={stickNav} />
+				<SelectionBox selectionName="Järjestä">
+					<div>
+						<RadioButton name="Järjestä" value="Edullisin Hinta"/>
+						<RadioButton name="Järjestä" value="Korkein Hinta"/>
+						<RadioButton name="Järjestä" value="Nimi"/>
+					</div>
+				</SelectionBox>
+				<ItemsDisplay items={filteredItems}/>
+			</ShoppingCartContext.Provider>
 		</StyledStorePage>
 	);
 };

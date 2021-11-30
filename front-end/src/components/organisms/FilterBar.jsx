@@ -12,6 +12,7 @@ const StyledFilterBar = styled.div`
 	overflow-y: hidden;
 	border-bottom: 1px solid ${props => props.theme.colors.background3}; 
 	background-color: ${props => props.theme.colors.background};
+	z-index: 2;
 
 	position: sticky;
 	transition: top 0.2s;

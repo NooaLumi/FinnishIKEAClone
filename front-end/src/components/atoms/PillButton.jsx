@@ -6,12 +6,15 @@ const PillButton = styled.button`
 	font-size: 0.75rem;
 	font-weight: 700;
 	white-space: nowrap;
-	background-color: ${props => props.theme.colors.background2};
+	color: ${props => props.color ? props.color : "black"};
+	background-color: ${props => props.bgColor ? props.bgColor : props.theme.colors.background2};
 
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 
 	text-decoration: none;
+	text-align: center;
 	vertical-align: middle;
 	cursor: pointer;
 	user-select: none;
@@ -20,7 +23,7 @@ const PillButton = styled.button`
 	border-radius: 1000px;
 
 	:hover {
-		background-color: ${props => props.theme.colors.background3}
+		background-color: ${props => props.theme.colors.background3};
 	}
 `
 

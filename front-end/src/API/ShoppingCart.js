@@ -6,7 +6,7 @@ const getItems = () => {
 
 const getItemsCount = () => {
 	const items = getItems();
-	return items.reduce((total, i) => total + i.amountInCart);
+	return items.reduce((total, i) => total + i.amountInCart, 0);
 }
 
 const addItem = (item) => {

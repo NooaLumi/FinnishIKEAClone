@@ -1,10 +1,9 @@
-import React from "react"
+import React, {useContext} from "react"
 import styled from "styled-components";
 import {ItemInfo} from "./ItemInfo";
 import {AddItemButton} from "../atoms/AddItemButton";
 import {addItem } from "../../API/ShoppingCart";
-
-
+import ShoppingCartContext from "../../contexts/ShoppingCartContext";
 
 const StyledDisplayItem = styled.div`
 	padding: 1rem 1.5rem;
@@ -24,19 +23,33 @@ const StyledDisplayItem = styled.div`
 	}
 `
 
-const DisplayItemImage = styled.img`
+const DisplayItemImage = styled.div`
 	padding: 0.5rem;
 	width: 100%;
+
+	> img {
+		transition: transform .2s;
+		width: 100%;
+	}
+
+	:hover > img {
+		transform: scale(1.2);
+	}
 `
 
 const DisplayItem = ({ item }) => {
+	const {itemAdded} = useContext(ShoppingCartContext);
+
 	const addItemClicked = e => {
 		addItem(item);
+		itemAdded(item);
 	}
 
 	return(
 		<StyledDisplayItem>
-			<DisplayItemImage src={"/images/" + item.image} alt={item.name}/>
+			<DisplayItemImage> 
+				<img src={"/images/" + item.image} alt={item.name}/>
+			</DisplayItemImage>
 			<ItemInfo item={item}/>
 			<AddItemButton onClick={addItemClicked}/>
 		</StyledDisplayItem>
