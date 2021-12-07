@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 
 const item = require("../models/item");
@@ -16,7 +17,6 @@ newItem.save();
 
 // Get all items
 itemsAPI.route("/items").get((req, res, next) => {
-	console.log("Connected!");
 	item.find({}).then(data => {
 		res.json(JSON.stringify(data));
 	}).catch(err => {
@@ -32,5 +32,17 @@ itemsAPI.route("/items/:id").get((req, res, next) => {
 		next(err);
 	})
 });
+
+	itemsAPI.route("/items").post((req, res, next) => {
+		const newItem = new item({
+			name: req.body.name,
+			type: req.body.type,
+			price: req.body.price,
+			image: req.body.image
+		});
+		newItem.save()
+			.then(d => res.json(d))
+			.catch(e => next(e));
+	});
 
 module.exports = itemsAPI;

@@ -1,6 +1,7 @@
 import { StorePage } from "./pages/StorePage";
 import { HomePage } from "./pages/HomePage";
 import { CartPage } from "./pages/CartPage";
+import { DevConsole} from "./pages/DevConsole";
 
 import {GlobalStyle} from "./components/GlobalStyle";
 import theme from "./utils/theme";
@@ -16,6 +17,7 @@ function App() {
 					<Route path="/" element={<HomePage/>}/>
 					<Route path="/store" element={<StorePage/>}/>
 					<Route path="/shoppingcart" element={<CartPage/>}/>
+					<Route path="/devconsole" element={<DevConsole/>}/>
 				</Routes>
 			</ThemeProvider>
 		</Router>

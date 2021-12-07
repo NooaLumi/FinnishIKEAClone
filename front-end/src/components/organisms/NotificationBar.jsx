@@ -1,6 +1,7 @@
 import styled, {keyframes} from "styled-components";
 import {MessageBox} from "../molecules/MessageBox";
 import React, {useEffect} from "react";
+import {device} from "../../utils/theme"
 
 
 const Peek = keyframes`
@@ -16,7 +17,7 @@ const StyledNotificationBar = styled.div`
 	width: 100%;
 	position: fixed;
 	top: 0;
-	left: 0;
+	right: 0;
 	z-index: 5;
 
 	> * {
@@ -27,6 +28,19 @@ const StyledNotificationBar = styled.div`
 		animation-duration: .5s;
 		animation-fill-mode: forwards;
 	}
+	
+	@media ${device.tablet} {
+		width: 60%;	
+	}
+
+	@media ${device.laptop} {
+		width: 50%;	
+	}
+
+	@media ${device.laptopL} {
+		width: 30%;	
+	}
+
 ` 
 
 const NotificationBar = ({notifications, setNotifications, onShowClick}) => {
@@ -42,7 +56,7 @@ const NotificationBar = ({notifications, setNotifications, onShowClick}) => {
 			const newNotifs = [...notifications];
 			newNotifs.pop();
 			setNotifications(newNotifs);
-		}, 2000);
+		}, 3000);
 		return () => clearInterval(removeTimer);
 	},[notifications, setNotifications]);
 

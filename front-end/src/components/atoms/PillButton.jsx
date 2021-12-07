@@ -24,7 +24,7 @@ const PillButton = styled.button`
 
 	:hover {
 		background-color: ${props => props.hoverBgColor ? props.hoverBgColor : props.theme.colors.background3};
-		color: ${props => props.hoverColor ? props.hoverColor : "black"};
+		color: ${props => props.hoverColor ? props.hoverColor : "black"} !important;
 	}
 `
 

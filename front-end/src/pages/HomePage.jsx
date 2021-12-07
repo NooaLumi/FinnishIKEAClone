@@ -6,6 +6,7 @@ import {RomuLogo} from "../components/atoms/RomuLogo";
 import {PillButton} from "../components/atoms/PillButton";
 import {MdTrendingFlat} from "react-icons/md";
 import {Link} from "react-router-dom";
+import {device} from "../utils/theme"
 
 const HomeInfo = styled.div`
 	width: 80%;
@@ -18,8 +19,20 @@ const HomeInfo = styled.div`
 
 	> img {
 		display: block;
-		width: 80%;
+		width: 60%;
 		height: auto;
+
+		@media ${device.tablet} {
+			width: 40%;
+		}
+
+		@media ${device.laptop} {
+			width: 30%;
+		}
+
+		@media ${device.laptopL} {
+			width: 20%;
+		}
 	}
 
 	> h2 {
@@ -30,11 +43,16 @@ const HomeInfo = styled.div`
 		margin-bottom: 1.5rem;
 	}
 
-	> ${PillButton} {
+	> * ${PillButton} {
 		font-size: .8rem;
 
 		:hover {
 			color: ${props => props.theme.colors.secondary};
+		}
+
+		@media ${device.tablet} {
+			padding: 1.3rem;
+			font-size: .9rem;
 		}
 	}
 

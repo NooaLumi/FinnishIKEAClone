@@ -5,6 +5,7 @@ import formatPrice from "../../utils/formatPrice"
 import {removeItem, addItem, subtractItem} from "../../API/ShoppingCart"
 import CartUpdateContext from "../../contexts/CartUpdateContext"
 import React, {useContext} from "react"
+import {device} from "../../utils/theme"
 
 const StyledListDisplayItem = styled.div`
 	display: flex;
@@ -36,6 +37,18 @@ const ItemInfoBox = styled.div`
 const StyledItemImage = styled.img`
 	width: 30%;
 	min-width: 80px;
+
+	@media ${device.tablet} {
+		width: 25%;
+	}
+
+	@media ${device.laptop} {
+		width: 20%;
+	}
+
+	@media ${device.laptopL} {
+		width: 15%;
+	}
 `
 
 const ItemPriceDisplay = styled.h3`

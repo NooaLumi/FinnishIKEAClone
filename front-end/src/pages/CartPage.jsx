@@ -7,12 +7,30 @@ import { useNavigate } from 'react-router-dom';
 import {getItems} from "../API/ShoppingCart"
 import CartUpdateContext from "../contexts/CartUpdateContext";
 import styled from "styled-components"
+import {CartTemplate} from "../templates/CartTemplate"
+import {device} from "../utils/theme"
 
 const CartHead = styled.h2`
 	font-size: 1.5rem;
 	padding: calc(var(--margin) / 2) var(--margin) calc(var(--margin) * 2) var(--margin);
 `
+const DisplayItemsList = styled.div`
+	@media ${device.tablet} {
+		margin: 0 5%;
+	}
 
+	@media ${device.laptop} {
+		margin: 0 10%;
+	}
+
+	@media ${device.laptopL} {
+		margin: 0 15%;
+	}		
+
+	@media ${device.desktop} {
+		margin: 0 20%;
+	}		
+`
 const CartPage = ({className}) => {
 	const prevScrollY = useRef(0);
 	const [stickNav, setStickNav] = useState(true);
@@ -51,19 +69,21 @@ const CartPage = ({className}) => {
 
 	return(
 		<CartUpdateContext.Provider value={{items: items, itemsUpdate: itemsUpdate}}>
-			<div className={className}>
+			<CartTemplate className={className}>
 				<Navigation
-					isSticky={true}
+					isSticky={stickNav}
 					showSearchIcon={true}
 					searchIconOnClick={searchIconOnClick}
 					showCart={false}
 				/>
-				<CartHead> Ostoskori </CartHead>
-				{getItems().map(item => (
-					<ListDisplayItem item={item} key={item._id}/>
-				))}
-				<CheckoutControls items={getItems()}/>
-			</div>
+				<DisplayItemsList>
+					<CartHead> Ostoskori </CartHead>
+					{getItems().map(item => (
+						<ListDisplayItem item={item} key={item._id}/>
+					))}
+					<CheckoutControls items={getItems()}/>
+				</DisplayItemsList>
+			</CartTemplate>
 		</CartUpdateContext.Provider>
 	);
 }

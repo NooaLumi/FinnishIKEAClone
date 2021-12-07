@@ -152,22 +152,26 @@ const StorePage = () => {
 					</Summary>
 				}
 				<FilterBar stickLower={stickNav} onChange={editingFilterChange} onClear={clearAllFilters}/>
-					{editingFilter && <FilterScreen/>}
-					<FilterEdit>
-					{ editingFilter === "order" ?
-						(
-							<OrderFilter onClose={closeFilterEdit} onChange={onSortOrderChange} onClear={clearAllFilters} checked={sortOrder}/>
-						)
-						: editingFilter === "category" ?
-						(
-							<CategoryFilter onClose={closeFilterEdit} onChange={onCategoryFilterChange} onClear={clearAllFilters} checked={categoryFilter}/>
+					{editingFilter && (
+					<>
+						<FilterScreen/>
+						<FilterEdit>
+						{ editingFilter === "order" ?
+							(
+								<OrderFilter onClose={closeFilterEdit} onChange={onSortOrderChange} onClear={clearAllFilters} checked={sortOrder}/>
+							)
+							: editingFilter === "category" ?
+							(
+								<CategoryFilter items={items} onClose={closeFilterEdit} onChange={onCategoryFilterChange} onClear={clearAllFilters} checked={categoryFilter}/>
 
-						) : editingFilter === "price" ? 
-						(
-							<PriceFilter onClose={closeFilterEdit} onClear={clearAllFilters} priceRanges={priceRanges} setPriceRanges={setPriceRanges}/>
-						) : ""
-					}
-					</FilterEdit>
+							) : editingFilter === "price" ? 
+							(
+								<PriceFilter onClose={closeFilterEdit} onClear={clearAllFilters} priceRanges={priceRanges} setPriceRanges={setPriceRanges}/>
+							) : ""
+						}
+						</FilterEdit>
+					</>
+					)}
 				<ItemsDisplay items={readyItems()}/>
 			</ShoppingCartContext.Provider>
 		</StoreTemplate>

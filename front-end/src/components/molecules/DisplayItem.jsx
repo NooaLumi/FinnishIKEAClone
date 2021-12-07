@@ -28,7 +28,8 @@ const DisplayItemImage = styled.div`
 	width: 100%;
 
 	> img {
-		width: 100%;
+		max-width: 100%;
+		height: auto;
 	}
 
 	:hover > img {

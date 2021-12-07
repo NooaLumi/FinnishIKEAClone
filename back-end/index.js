@@ -4,12 +4,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
+app.use(express.json());
 
+try {
 mongoose.connect(process.env.DB, {useUnifiedTopology: true, useNewUrlParser: true});
 const db = mongoose.connection;
 db.once("open", () => {
 	console.log("Connected to MongoDB!");
 })
+} catch(err) {
+	console.log(err);
+}
 
 const itemsAPI = require("./services/items");
 app.use("/api", itemsAPI);

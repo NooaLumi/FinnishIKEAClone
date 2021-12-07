@@ -27,7 +27,7 @@ const TotalSection = styled.div`
 	padding: var(--margin);
 
 	> h3 {
-		font-size: .9rem;
+		font-size: 1rem;
 	}
 
 	> p {

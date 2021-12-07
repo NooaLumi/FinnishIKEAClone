@@ -3,6 +3,7 @@ import {IconButton} from "../atoms/IconButton";
 import { MdClose } from "react-icons/md";
 import {ConfirmButton} from "../atoms/ConfirmButton"
 import {ClearButton} from "../atoms/ClearButton"
+import {device} from "../../utils/theme"
 
 
 const StyledSelectionBox = styled.div`
@@ -16,6 +17,20 @@ const StyledSelectionBox = styled.div`
 	justify-content: space-between;
 	border-top-right-radius: 1rem;
 	border-top-left-radius: 1rem;
+	margin: 0 auto;
+
+	@media ${device.tablet} {
+		width: 70%;
+		border-radius: 1rem;
+	}
+	
+	@media ${device.laptop} {
+		width: 50%;
+	}
+
+	@media ${device.laptopL} {
+		width: 30%;
+	}
 `
 
 const SelectionHead = styled.div`

@@ -14,14 +14,14 @@ const categoryFilter = (category, items) => {
 
 const priceFilter = (priceRanges, items) => {
 	return items.filter(i => {
-		return priceRanges.some(range => range.active ? (i.price > range.min && i.price < range.max) : false);
+		return priceRanges.some(range => range.active ? (i.price >= range.min && i.price <= range.max) : false);
 	})
 }
 
 const getPriceRanges = (items) => {
-	const steps = [1, 10, 20, 50, 100, 1000];
+	const steps = [1, 10, 15, 20, 30, 50, 100, 200, 300, 500, 1000];
 	const highest = items.reduce((max, i) => i.price > max ? i.price : max, 0);
-	const step = steps.find(s => s * 4 > highest);
+	const step = steps.find(s => s * 2 > highest);
 	const boxAmount = items.length < 5 ? items.length : 5;
 	const forks = [];
 
