@@ -1,7 +1,6 @@
 import { MdSearch, MdClose, MdCancel } from "react-icons/md";
 import React, { useState } from "react";
 import styled from "styled-components";
-import {DividerIcon} from "../atoms/DividerIcon";
 
 const SearchIcon = styled(MdSearch)`
 	font-size: var(--icon-size);
@@ -9,6 +8,7 @@ const SearchIcon = styled(MdSearch)`
 	top: 50%;
 	transform: translateY(-50%);
 	left: 1.5rem;
+	cursor: pointer;
 `
 
 const SearchControls = styled.div`
@@ -23,14 +23,9 @@ const SearchControls = styled.div`
 	align-items: center;
 	width: fit-content;
 
-
 	> * {
-		font-size: var(--icon-size);
-		margin-left: calc(var(--margin) * 0.8);
-	}
-
-	> :first-child {
 		font-size: calc(var(--icon-size) * 0.75);
+		margin-left: calc(var(--margin) * 0.8);
 	}
 `
 
@@ -64,8 +59,23 @@ const StyledSearchBar = styled.div`
 	}
 `
 
-const SearchBar = React.forwardRef(({className, value, onChange}, ref) => {
+const StyledClearButton = styled.button`
+	background: none;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	
+`
+
+const SearchBar = React.forwardRef(({className, value, onChange, onClear}, ref) => {
 	const [isActive, setActive] = useState(false);
+
+	const onClearClick = (e) => {
+		ref.current.focus();
+		onClear(e);
+	}
 
 	return (
 		<StyledSearchBar className={className}>
@@ -83,13 +93,9 @@ const SearchBar = React.forwardRef(({className, value, onChange}, ref) => {
 				value={value}
 				onChange={onChange}
 			/>
-			{isActive && (
 				<SearchControls>
-					<MdCancel/>
-					<DividerIcon/>
-					<MdSearch />
+					<StyledClearButton onClick={onClearClick}> <MdCancel/> </StyledClearButton>
 				</SearchControls>
-			)}
 		</StyledSearchBar>
 	);
 });

@@ -28,12 +28,10 @@ const DisplayItemImage = styled.div`
 	width: 100%;
 
 	> img {
-		transition: transform .2s;
 		width: 100%;
 	}
 
 	:hover > img {
-		transform: scale(1.2);
 	}
 `
 

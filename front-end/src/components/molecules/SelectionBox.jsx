@@ -37,6 +37,8 @@ const SelectionHead = styled.div`
 	}
 
 	> :last-child {
+		justify-self: right;
+		margin-right: var(--margin);
 		grid-column: 3 / 4;
 		font-size: calc(var(--icon-size) * 0.9);
 		padding: .3rem;
@@ -45,7 +47,14 @@ const SelectionHead = styled.div`
 
 const SelectionContent = styled.div`
 	width: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
+
+	/* Hide scrollbar */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+	::-webkit-scrollbar { /* Chrome, Safari and Opera */
+		display: none; 
+	}
 `
 
 const SelectionBottom = styled.div`

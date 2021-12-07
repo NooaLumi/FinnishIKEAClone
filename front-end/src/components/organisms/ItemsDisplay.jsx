@@ -10,7 +10,7 @@ const StyledItemsDisplay = styled.div`
 const ItemsDisplay = ({ items }) => {
 	return(
 			<StyledItemsDisplay>
-				{items.map(item => (
+				{items.length > 0 && items.map(item => (
 					<DisplayItem item={item} key={item._id}/>
 				))}
 			</StyledItemsDisplay>

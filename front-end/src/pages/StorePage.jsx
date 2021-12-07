@@ -8,11 +8,16 @@ import {StoreTemplate} from "../templates/StoreTemplate";
 import {getAllItems} from "../API/Items";
 import {getItemsCount} from "../API/ShoppingCart";
 import getCSSVariable from "../utils/getCSSVariable";
+import {sortItems} from "../utils/sortItems";
+import {filterItems, getPriceRanges} from "../utils/filterItems";
 import styled from "styled-components";
 import ShoppingCartContext from "../contexts/ShoppingCartContext";
 import useDelayedValue from "../hooks/DelayedValue";
-import {SelectionBox} from "../components/molecules/SelectionBox";
-import {RadioButton} from "../components/atoms/RadioButton";
+import {FilterEdit} from "../components/organisms/FilterEdit";
+import {PriceFilter} from "../components/organisms/PriceFilter";
+import {CategoryFilter} from "../components/organisms/CategoryFilter";
+import {OrderFilter} from "../components/organisms/OrderFilter";
+
 
 import { useState, useEffect, useRef } from "react";
 
@@ -20,10 +25,7 @@ const SearchSection = styled.div`
 	margin: 0 calc(var(--margin) * 0.7);
 `
 
-const StyledStorePage = styled(StoreTemplate)`
-`
-
-const Home = () => {
+const StorePage = () => {
 	const prevScrollY = useRef(0);
 	const searchEl = useRef(null);
 	const [stickNav, setStickNav] = useState(false);
@@ -31,7 +33,12 @@ const Home = () => {
 	const [itemCount, setItemCount] = useState(getItemsCount);
 	const [items, setItems] = useState([]);
 	const [notifications, setNotifications] = useState([]);
+	const [editingFilter, setEditingFilter] = useState(null);
+
 	const [query, setQuery] = useState("");
+	const [sortOrder, setSortOrder] = useState("name-desc");
+	const [categoryFilter, setCategoryFilter] = useState(null);
+	const [priceRanges, setPriceRanges] = useState(getPriceRanges(items));
 
 	const delayedQuery = useDelayedValue(query, 400);
 
@@ -43,21 +50,28 @@ const Home = () => {
 		searchEl.current.focus();
 	};
 
+	const onSortOrderChange = e => setSortOrder(e.target.value);
+	const onCategoryFilterChange = e => setCategoryFilter(e.target.value);
 	const onQueryChange = e => setQuery(e.target.value);
+	const onQueryClear = () => setQuery("");
+	const closeFilterEdit = () => setEditingFilter(null);
 
-	const filteredItems = items.filter(i => 
-			i.name.toLowerCase().includes(delayedQuery.toLowerCase())
-			|| i.type.toLowerCase().includes(delayedQuery.toLowerCase()));
+	const editingFilterChange = filter => {
+		setEditingFilter(filter ? filter : null);
+	}
+
+	const readyItems = () => sortItems(
+			filterItems(items, delayedQuery, categoryFilter, priceRanges), 
+		sortOrder);
 
 	const itemAdded = (item) => {
 		setItemCount(itemCount + 1);
 
-		/*
 		setNotifications([...notifications, {
 			link: "#",
-			message: `${item.name} lisätty ostoskoriin.`
+			message: `${item.name} lisätty ostoskoriin.`,
+			id: item._id
 		}])
-		*/
 	}
 
 	// Fetch items to display
@@ -65,6 +79,12 @@ const Home = () => {
 		getAllItems()
 			.then(items => setItems(items));
 	}, []);
+
+	useEffect(() => {
+		setPriceRanges(getPriceRanges(readyItems()));
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [items, delayedQuery, categoryFilter]);
 
 	// Handle sticky display behavior
 	useEffect(() => {
@@ -94,7 +114,7 @@ const Home = () => {
 	}, [stickNav, showSearchIcon]);
 
 	return (
-		<StyledStorePage>
+		<StoreTemplate>
 			<ShoppingCartContext.Provider value={{itemCount, itemAdded}}>
 				<NotificationBar notifications={notifications} setNotifications={setNotifications} />
 				<Navigation
@@ -103,25 +123,33 @@ const Home = () => {
 					searchIconOnClick={searchIconOnClick}
 				/>
 				<SearchSection>
-					<SearchBar ref={searchEl} onChange={onQueryChange} value={query} />
+					<SearchBar onClear={onQueryClear} ref={searchEl} onChange={onQueryChange} value={query} />
 				</SearchSection>
 				{delayedQuery && 
 					<Summary>
 						Näytetään hakutulokset haulle <b>"{delayedQuery}"</b>
 					</Summary>
 				}
-				<FilterBar stickLower={stickNav} />
-				<SelectionBox selectionName="Järjestä">
-					<div>
-						<RadioButton name="Järjestä" value="Edullisin Hinta"/>
-						<RadioButton name="Järjestä" value="Korkein Hinta"/>
-						<RadioButton name="Järjestä" value="Nimi"/>
-					</div>
-				</SelectionBox>
-				<ItemsDisplay items={filteredItems}/>
+				<FilterBar stickLower={stickNav} onChange={editingFilterChange}/>
+					<FilterEdit>
+					{ editingFilter === "order" ?
+						(
+							<OrderFilter onClose={closeFilterEdit} onChange={onSortOrderChange} checked={sortOrder}/>
+						)
+						: editingFilter === "category" ?
+						(
+							<CategoryFilter onClose={closeFilterEdit} onChange={onCategoryFilterChange} checked={categoryFilter}/>
+
+						) : editingFilter === "price" ? 
+						(
+							<PriceFilter onClose={closeFilterEdit} priceRanges={priceRanges} setPriceRanges={setPriceRanges}/>
+						) : ""
+					}
+					</FilterEdit>
+				<ItemsDisplay items={readyItems()}/>
 			</ShoppingCartContext.Provider>
-		</StyledStorePage>
+		</StoreTemplate>
 	);
 };
 
-export { Home };
+export { StorePage };
