@@ -29,7 +29,7 @@ const StyledNotificationBar = styled.div`
 	}
 ` 
 
-const NotificationBar = ({notifications, setNotifications}) => {
+const NotificationBar = ({notifications, setNotifications, onShowClick}) => {
 	const removeNotification = (id) => {
 		setNotifications(notifications.filter(n => n.id !== id));
 	}
@@ -51,7 +51,7 @@ const NotificationBar = ({notifications, setNotifications}) => {
 			{notifications.length > 0 && notifications.map(n => (
 				<MessageBox 
 					onClose={() => removeNotification(n.id)} 
-					link={n.link}
+					onShowClick={onShowClick}
 					key={n.id}
 				> 
 					{n.message} 

@@ -5,7 +5,7 @@ import {RomuLogo} from "../atoms/RomuLogo";
 import {IconButton} from "../atoms/IconButton";
 import {IconBar} from "../molecules/IconBar";
 import ShoppingCartContext from "../../contexts/ShoppingCartContext";
-
+import {Link} from "react-router-dom";
 
 const StyledNav = styled.nav`
 	width: 100%;
@@ -45,15 +45,32 @@ const CartTotal = styled.div`
 	text-align: center;
 ` 
 
-const Navigation = ({ isSticky, showSearchIcon, searchIconOnClick }) => {
+const StyledLink = styled(Link)`
+	height: 100%;
+`
+
+const Navigation = ({ isSticky, showSearchIcon, searchIconOnClick, showCart = true, className }) => {
 	const {itemCount} = useContext(ShoppingCartContext);
 
 	return (
-		<StyledNav sticky={isSticky}>
-			<RomuLogo/>
+		<StyledNav sticky={isSticky} className={className}>
+			<StyledLink to="/"> <RomuLogo/> </StyledLink>
 			<IconBar>
-				{showSearchIcon && <MdSearch onClick={searchIconOnClick} />}
-				<IconButton> <MdShoppingCart /> <CartTotal>{itemCount}</CartTotal> </IconButton>
+				{showSearchIcon && 
+					<IconButton onClick={searchIconOnClick}>
+						<MdSearch/>
+					</IconButton>
+				}
+				{showCart && 
+					<Link to="/shoppingcart"> 
+						<IconButton> 
+							<MdShoppingCart /> 
+							{itemCount > 0 && 
+								<CartTotal>{itemCount}</CartTotal>
+							} 
+						</IconButton>
+					</Link>
+				}
 				<IconButton> <MdMenu /> </IconButton>
 			</IconBar>
 		</StyledNav>

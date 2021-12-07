@@ -41,12 +41,18 @@ const MessageControls = styled.div`
 	}
 `
 
-const MessageBox = ({children, link, onClose}) => {
+const StyledShowLink = styled.button`
+	background: none;
+	border: none;
+	cursor: pointer;
+`
+
+const MessageBox = ({children, onShowClick, onClose}) => {
 	return (
 		<StyledMessageBox>
 			{children}
 			<MessageControls>
-				<a href={link}>Näytä</a>
+				<StyledShowLink onClick={onShowClick}>Näytä</StyledShowLink>
 				<DividerIcon color={"white"}/>
 				<IconButton onClick={onClose} hoverColor={"#222"} color={"white"}>
 					<MdClose/>

@@ -45,14 +45,14 @@ const FilterButton = styled(PillButton)`
 	}
 ` 
 
-const FilterBar = ({ stickLower, onChange }) => { 
+const FilterBar = ({ stickLower, onChange, onClear }) => { 
 	return (
 		<StyledFilterBar stickLower={stickLower}>
 			<PillButton onClick={() => onChange("order")}> Järjestä </PillButton>
 			<PillButton onClick={() => onChange("category")}> Kategoria </PillButton>
 			<PillButton onClick={() => onChange("price")}> Hinta </PillButton>
-			<FilterButton>
-				Kaikki suodattimet <MdTune />
+			<FilterButton onClick={onClear}>
+				Tyhjennä kaikki <MdTune />
 			</FilterButton>
 		</StyledFilterBar>
 	);

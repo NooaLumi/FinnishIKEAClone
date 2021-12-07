@@ -23,7 +23,8 @@ const PillButton = styled.button`
 	border-radius: 1000px;
 
 	:hover {
-		background-color: ${props => props.theme.colors.background3};
+		background-color: ${props => props.hoverBgColor ? props.hoverBgColor : props.theme.colors.background3};
+		color: ${props => props.hoverColor ? props.hoverColor : "black"};
 	}
 `
 

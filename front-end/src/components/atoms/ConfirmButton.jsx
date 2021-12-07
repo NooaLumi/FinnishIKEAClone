@@ -8,6 +8,7 @@ const ConfirmButton = styled(PillButton)`
 
 	:hover {
 		background-color: rgb(50, 50, 50);
+		color: white;
 	}
 ` 
 

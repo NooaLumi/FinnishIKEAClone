@@ -17,6 +17,7 @@ import {FilterEdit} from "../components/organisms/FilterEdit";
 import {PriceFilter} from "../components/organisms/PriceFilter";
 import {CategoryFilter} from "../components/organisms/CategoryFilter";
 import {OrderFilter} from "../components/organisms/OrderFilter";
+import { useNavigate } from 'react-router-dom';
 
 
 import { useState, useEffect, useRef } from "react";
@@ -25,9 +26,20 @@ const SearchSection = styled.div`
 	margin: 0 calc(var(--margin) * 0.7);
 `
 
+const FilterScreen = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 2;
+	background: rgba(0, 0, 0, 0.5);
+`
+
 const StorePage = () => {
 	const prevScrollY = useRef(0);
 	const searchEl = useRef(null);
+	const navigate = useNavigate();
 	const [stickNav, setStickNav] = useState(false);
 	const [showSearchIcon, setShowSearchIcon] = useState(false);
 	const [itemCount, setItemCount] = useState(getItemsCount);
@@ -50,11 +62,20 @@ const StorePage = () => {
 		searchEl.current.focus();
 	};
 
+	const goToShoppingCart = () => navigate("/shoppingcart");
+
 	const onSortOrderChange = e => setSortOrder(e.target.value);
 	const onCategoryFilterChange = e => setCategoryFilter(e.target.value);
 	const onQueryChange = e => setQuery(e.target.value);
 	const onQueryClear = () => setQuery("");
 	const closeFilterEdit = () => setEditingFilter(null);
+
+	const clearAllFilters = () => {
+		setSortOrder("name-desc");
+		setCategoryFilter(null);
+		setPriceRanges(getPriceRanges(items));
+		setEditingFilter(null);
+	}
 
 	const editingFilterChange = filter => {
 		setEditingFilter(filter ? filter : null);
@@ -116,7 +137,7 @@ const StorePage = () => {
 	return (
 		<StoreTemplate>
 			<ShoppingCartContext.Provider value={{itemCount, itemAdded}}>
-				<NotificationBar notifications={notifications} setNotifications={setNotifications} />
+				<NotificationBar onShowClick={goToShoppingCart} notifications={notifications} setNotifications={setNotifications} />
 				<Navigation
 					isSticky={stickNav}
 					showSearchIcon={showSearchIcon}
@@ -130,19 +151,20 @@ const StorePage = () => {
 						Näytetään hakutulokset haulle <b>"{delayedQuery}"</b>
 					</Summary>
 				}
-				<FilterBar stickLower={stickNav} onChange={editingFilterChange}/>
+				<FilterBar stickLower={stickNav} onChange={editingFilterChange} onClear={clearAllFilters}/>
+					{editingFilter && <FilterScreen/>}
 					<FilterEdit>
 					{ editingFilter === "order" ?
 						(
-							<OrderFilter onClose={closeFilterEdit} onChange={onSortOrderChange} checked={sortOrder}/>
+							<OrderFilter onClose={closeFilterEdit} onChange={onSortOrderChange} onClear={clearAllFilters} checked={sortOrder}/>
 						)
 						: editingFilter === "category" ?
 						(
-							<CategoryFilter onClose={closeFilterEdit} onChange={onCategoryFilterChange} checked={categoryFilter}/>
+							<CategoryFilter onClose={closeFilterEdit} onChange={onCategoryFilterChange} onClear={clearAllFilters} checked={categoryFilter}/>
 
 						) : editingFilter === "price" ? 
 						(
-							<PriceFilter onClose={closeFilterEdit} priceRanges={priceRanges} setPriceRanges={setPriceRanges}/>
+							<PriceFilter onClose={closeFilterEdit} onClear={clearAllFilters} priceRanges={priceRanges} setPriceRanges={setPriceRanges}/>
 						) : ""
 					}
 					</FilterEdit>

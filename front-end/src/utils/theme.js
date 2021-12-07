@@ -22,6 +22,7 @@ const device = {
 const theme = {
 	colors: {
 		main: "#0058abff",
+		mainLighter: "hsl(210, 100%, 50%)",
 		secondary: "#a8fb14ff",
 		background: "white",
 		background2: "#f5f5f5",

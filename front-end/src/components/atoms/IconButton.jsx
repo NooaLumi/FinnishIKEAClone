@@ -1,7 +1,9 @@
 import React from "react"
 import styled from "styled-components";
 
-const StyledIconButton = styled.a`
+const StyledIconButton = styled.button`
+	border: none;
+	background: ${props => props.bgColor ? props.bgColor : "none"};
 	display: flex;
     justify-content: center;
     align-items: center;
@@ -21,9 +23,9 @@ const StyledIconButton = styled.a`
 	}
 `
 
-const IconButton = ({onClick, children, color, hoverColor}) => {
+const IconButton = ({onClick, children, color, hoverColor, bgColor}) => {
 	return(
-		<StyledIconButton hoverColor={hoverColor} color={color} onClick={onClick}>
+		<StyledIconButton bgColor={bgColor} hoverColor={hoverColor} color={color} onClick={onClick}>
 			{children}
 		</StyledIconButton>
 	);

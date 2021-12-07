@@ -3,7 +3,7 @@ import {SelectionBox} from "../molecules/SelectionBox";
 import {CheckBox} from "../atoms/CheckBox";
 
 
-const PriceFilter = ({onClose, priceRanges, setPriceRanges}) => {
+const PriceFilter = ({onClose, onClear, priceRanges, setPriceRanges}) => {
 	const priceRangeChange = (range) => {
 		setPriceRanges(priceRanges.map(p => {
 			if(p.min === range.min) {
@@ -15,7 +15,7 @@ const PriceFilter = ({onClose, priceRanges, setPriceRanges}) => {
 	}
 
 	return (
-		<SelectionBox onClose={onClose} selectionName="Hinta">
+		<SelectionBox onClose={onClose} selectionName="Hinta" onClear={onClear}>
 			{priceRanges.map(priceRange => (
 				<CheckBox 
 					key={`${priceRange.min}${priceRange.max}`}

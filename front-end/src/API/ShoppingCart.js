@@ -4,6 +4,16 @@ const getItems = () => {
 	return items ? items : [];
 }
 
+const getTotalPrice = () => {
+	let total = 0;
+	getItems().map(i => {
+		for(let x = 0; x < i.amountInCart; x++) {
+			total += i.price;	
+		}
+	})
+	return total;
+}
+
 const getItemsCount = () => {
 	const items = getItems();
 	return items.reduce((total, i) => total + i.amountInCart, 0);
@@ -32,7 +42,7 @@ const subtractItem = (item) => {
 	let items = getItems();
 	if(items.some(i => i._id === item._id)) {
 		// Remove item if there's only one in cart
-		if(items.some(i => i.amountInCart === 1)) {
+		if(items.find(i => i._id === item._id).amountInCart === 1) {
 			items = items.filter(i => i._id !== item._id);
 		} else {
 			// Subtract one from cart
@@ -49,4 +59,4 @@ const clearItems = () => {
 }
 
 
-export {getItems, addItem, subtractItem, removeItem, clearItems, getItemsCount}
+export {getItems, addItem, subtractItem, removeItem, clearItems, getItemsCount, getTotalPrice}

@@ -11,18 +11,20 @@ const StyledItemInfo = styled.div`
 		font-size: 0.9rem;
 	}
 	> :nth-child(3) {
-		font-weight: bold;
 		margin-top: 0.5rem; 
 		font-size: 0.9rem;
 	}
 `
 
-const ItemInfo = ({ item }) => {
+const ItemInfo = ({ item, pricePerPiece = false }) => {
 	return(
 		<StyledItemInfo>
 			<h3>{item.name}</h3>
 			<p>{item.type}</p>
-			<p>{formatPrice(item.price)}</p>
+			{pricePerPiece 
+				? <p><strong>{formatPrice(item.price)}</strong>/kpl</p>
+				: <p><strong>{formatPrice(item.price)}</strong></p>
+			}
 		</StyledItemInfo>
 	);
 }

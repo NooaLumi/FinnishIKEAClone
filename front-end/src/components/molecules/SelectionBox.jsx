@@ -14,6 +14,8 @@ const StyledSelectionBox = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
+	border-top-right-radius: 1rem;
+	border-top-left-radius: 1rem;
 `
 
 const SelectionHead = styled.div`
