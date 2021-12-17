@@ -1,11 +1,13 @@
-import React, {useContext} from "react";
+import { RomuLogo } from "../atoms/RomuLogo";
+import { IconButton } from "../atoms/buttons/IconButton";
+import { IconBar } from "../molecules/IconBar";
 import { MdSearch, MdShoppingCart, MdMenu } from "react-icons/md";
-import styled, {css} from "styled-components";
-import {RomuLogo} from "../atoms/RomuLogo";
-import {IconButton} from "../atoms/IconButton";
-import {IconBar} from "../molecules/IconBar";
+
 import ShoppingCartContext from "../../contexts/ShoppingCartContext";
-import {Link} from "react-router-dom";
+
+import React, { useContext } from "react";
+import styled, { css } from "styled-components";
+import { Link } from "react-router-dom";
 
 const StyledNav = styled.nav`
 	width: 100%;
@@ -22,15 +24,17 @@ const StyledNav = styled.nav`
 	top: calc(var(--nav-height) * -1);
 	transition: top 0.2s;
 
-	${props => props.sticky === true && css`
-		position: sticky;
-		top: 0;
-	`}
-`
+	${(props) =>
+		props.sticky === true &&
+		css`
+			position: sticky;
+			top: 0;
+		`}
+`;
 
 const CartTotal = styled.div`
 	border-radius: 100%;
-	background-color: ${props => props.theme.colors.main};
+	background-color: ${(props) => props.theme.colors.main};
 	color: white;
 	position: absolute;
 	top: -3px;
@@ -43,35 +47,45 @@ const CartTotal = styled.div`
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-` 
+`;
 
 const StyledLink = styled(Link)`
 	height: 100%;
-`
+`;
 
-const Navigation = ({ isSticky, showSearchIcon, searchIconOnClick, showCart = true, className }) => {
-	const {itemCount} = useContext(ShoppingCartContext);
+const Navigation = ({
+	isSticky,
+	showSearchIcon,
+	searchIconOnClick,
+	showCart = true,
+	className,
+}) => {
+	const { itemsInCart } = useContext(ShoppingCartContext);
 
 	return (
 		<StyledNav sticky={isSticky} className={className}>
-			<StyledLink to="/"> <RomuLogo/> </StyledLink>
+			<StyledLink to="/">
+				<RomuLogo />
+			</StyledLink>
 			<IconBar>
-				{showSearchIcon && 
+				{showSearchIcon && (
 					<IconButton onClick={searchIconOnClick}>
-						<MdSearch/>
+						<MdSearch />
 					</IconButton>
-				}
-				{showCart && 
-					<Link to="/shoppingcart"> 
-						<IconButton> 
-							<MdShoppingCart /> 
-							{itemCount > 0 && 
-								<CartTotal>{itemCount}</CartTotal>
-							} 
+				)}
+				{showCart && (
+					<Link to="/shoppingcart">
+						<IconButton>
+							<MdShoppingCart />
+							{itemsInCart > 0 && (
+								<CartTotal>{itemsInCart}</CartTotal>
+							)}
 						</IconButton>
 					</Link>
-				}
-				<IconButton> <MdMenu /> </IconButton>
+				)}
+				<IconButton>
+					<MdMenu />
+				</IconButton>
 			</IconBar>
 		</StyledNav>
 	);

@@ -1,10 +1,10 @@
 import React from "react";
-import {getItemsCount} from "../API/ShoppingCart";
-
+import { getItemsCount } from "../API/ShoppingCart";
 
 const ShoppingCartContext = React.createContext({
-	itemCount: getItemsCount(),
-	itemAdded: () => 0
+	itemsInCart: getItemsCount(),
+	itemAdded: () => 0,
+	itemsUpdate: () => 0,
 });
 
 export default ShoppingCartContext;

@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 	:root {
@@ -6,10 +6,6 @@ const GlobalStyle = createGlobalStyle`
 		--margin: 1.25rem;
 		--icon-size: 1.4rem;
 		--nav-height: 60px;
-
-		--color-main: #0058abff;
-		--color-secondary: #a8fb14ff;
-
 		font-family: "Noto Sans", sans-serif;
 	}
 
@@ -19,6 +15,6 @@ const GlobalStyle = createGlobalStyle`
 		box-sizing: border-box;
 		font-family: inherit;
 	}
-`
+`;
 
 export { GlobalStyle };

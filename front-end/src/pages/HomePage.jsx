@@ -1,12 +1,12 @@
-import styled, {useTheme} from "styled-components";
+import styled, { useTheme } from "styled-components";
 import React from "react";
 
-import {HomeTemplate} from "../templates/HomeTemplate"
-import {RomuLogo} from "../components/atoms/RomuLogo";
-import {PillButton} from "../components/atoms/PillButton";
-import {MdTrendingFlat} from "react-icons/md";
-import {Link} from "react-router-dom";
-import {device} from "../utils/theme"
+import { HomeTemplate } from "../templates/HomeTemplate";
+import { RomuLogo } from "../components/atoms/RomuLogo";
+import { PillButton } from "../components/atoms/buttons/PillButton";
+import { MdTrendingFlat } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { device } from "../utils/theme";
 
 const HomeInfo = styled.div`
 	width: 80%;
@@ -44,36 +44,42 @@ const HomeInfo = styled.div`
 	}
 
 	> * ${PillButton} {
-		font-size: .8rem;
+		font-size: 0.8rem;
 
 		:hover {
-			color: ${props => props.theme.colors.secondary};
+			color: ${(props) => props.theme.colors.secondary};
 		}
 
 		@media ${device.tablet} {
 			padding: 1.3rem;
-			font-size: .9rem;
+			font-size: 0.9rem;
 		}
 	}
+`;
 
-` 
+const EnterButton = styled(PillButton)`
+	transition: background 0.1s, color 0.1s;
+`;
 
 const HomePage = () => {
 	const theme = useTheme();
-	return(
+	return (
 		<HomeTemplate>
 			<HomeInfo>
-				<RomuLogo/>
-				<h2>
-					Tervetuloa ROMU kauppaan!
-				</h2>
+				<RomuLogo />
+				<h2>Tervetuloa ROMU kauppaan!</h2>
 				<Link to="/store">
-					<PillButton color="white" hoverColor="black" hoverBgColor={theme.colors.secondary} bgColor={theme.colors.main}> 
-						Aloita shoppailu &nbsp; <MdTrendingFlat/>
-					</PillButton>
+					<EnterButton
+						color="white"
+						hoverColor="black"
+						hoverBgColor={theme.colors.secondary}
+						bgColor={theme.colors.main}
+					>
+						Aloita shoppailu &nbsp; <MdTrendingFlat />
+					</EnterButton>
 				</Link>
 			</HomeInfo>
 		</HomeTemplate>
 	);
-}
+};
 export { HomePage };

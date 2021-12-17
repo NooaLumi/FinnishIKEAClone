@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title> Dev Console </title>
+	<style>
+		#product_form {
+			display: flex;
+			flex-direction: column;
+		}
+		input, select, button, label {
+			width: fit-content;
+		}
+		input, select, button {
+			margin-bottom: 1rem;
+		}
+	</style>
+</head>
+<body>
+	<h2> Product Form </h2>
+	<form id="product_form">
+		<label for="name"> Product Name: </label>
+		<input type="text" name="name" id="name" required>
+
+		<label for="type"> Product Type: </label>
+		<input list="types" name="type" id="type" required>
+		<datalist id="types">
+			<option value="Chair">Chair</option>
+			<option value="Table">Table</option>
+			<option value="Lamp">Lamp</option>
+			<option value="Cupboard">Cupboard</option>
+		</datalist>
+
+		<label for="price"> Product Price: </label>
+		<input type="number" min="1" step="any" name="price" id="price" required>
+
+		<label for="image"> Product Image: </label>
+		<select name="image" id="image" required>
+			<option value="chair.png"> Brown Chair</option>
+			<option value="cupboard.png"> Brown Cupboard</option>
+			<option value="lamp.png"> Brown Lamp</option>
+			<option value="table.png"> Brown Table</option>
+
+			<option value="chair-black.png"> Black Chair</option>
+			<option value="cupboard-black.png"> Black Cupboard</option>
+			<option value="lamp-black.png"> Black Lamp</option>
+			<option value="table-black.png"> Black Table</option>
+
+			<option value="chair-white.png"> White Chair</option>
+			<option value="cupboard-white.png"> White Cupboard</option>
+			<option value="lamp-white.png"> White Lamp</option>
+			<option value="table-white.png"> White Table</option>
+		</select>
+		<button type="submit">Submit</button>
+	</form>
+	<h2> Product list: </h2>
+	<code id="items_display"></code>
+
+	<script>
+		const form = document.getElementById("product_form");
+		const display = document.getElementById("items_display");
+
+		// Fetch items from "API/items"
+		const getItems = async() => {
+			const res = await fetch("api/items");
+			res.json().then(data => {
+				display.innerHTML = JSON.parse(data).map(i => `
+					<h3> ${i.name} </h3>
+					_id: ${i._id} <br/>
+					type: ${i.type} <br/>
+					price: ${i.price} <br/>
+					image: ${i.image} <br/>
+					<button onclick="deleteItem('${i._id}')"> DELETE </button>
+				`);
+			});
+		}
+		getItems();
+
+		// Delete item by ID
+		const deleteItem = async(id) => {
+			const res = await fetch(`api/items/${id}`, {
+				method: "DELETE",
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json"
+				}
+			});
+			res.json().then(data => {
+				getItems();
+			})
+
+		} 
+
+		// Send post request to "API/items"
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+
+			const res = await fetch("api/items", {
+				method: "POST",
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json"
+				},
+				body: `{
+					"name": "${form.name.value.toUpperCase()}",
+					"type": "${form.type.value}",
+					"price": "${form.price.value}",
+					"image": "${form.image.value}"
+				}`
+			});
+			res.json().then(data => {
+				console.log(data);
+				form.reset();
+				getItems();
+			})
+		})
+	</script>
+</body>
+</html>

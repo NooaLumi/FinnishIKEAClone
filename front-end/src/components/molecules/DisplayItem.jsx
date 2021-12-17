@@ -1,15 +1,20 @@
-import React, {useContext} from "react"
-import styled from "styled-components";
-import {ItemInfo} from "./ItemInfo";
-import {AddItemButton} from "../atoms/AddItemButton";
-import {addItem } from "../../API/ShoppingCart";
+import { ItemInfo } from "./ItemInfo";
+import { AddItemButton } from "../atoms/AddItemButton";
+
+import { addItem } from "../../API/ShoppingCart";
 import ShoppingCartContext from "../../contexts/ShoppingCartContext";
+
+import React, { useContext } from "react";
+import styled from "styled-components";
 
 const StyledDisplayItem = styled.div`
 	padding: 1rem 1.5rem;
-	border-bottom: 1px solid ${props => props.theme.colors.background3};
 
-	/* Only show <addItemButton/> on hover if not on touchscreen */
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	/* Add hover behavior to AddItemButton on non-touchscreen devices */
 	@media (hover: hover) {
 		> :last-child {
 			opacity: 0;
@@ -21,9 +26,9 @@ const StyledDisplayItem = styled.div`
 			}
 		}
 	}
-`
+`;
 
-const DisplayItemImage = styled.div`
+const ItemImage = styled.div`
 	padding: 0.5rem;
 	width: 100%;
 
@@ -31,27 +36,24 @@ const DisplayItemImage = styled.div`
 		max-width: 100%;
 		height: auto;
 	}
-
-	:hover > img {
-	}
-`
+`;
 
 const DisplayItem = ({ item }) => {
-	const {itemAdded} = useContext(ShoppingCartContext);
+	const { itemAdded } = useContext(ShoppingCartContext);
 
-	const addItemClicked = e => {
+	const addItemClicked = (e) => {
 		addItem(item);
 		itemAdded(item);
-	}
+	};
 
-	return(
+	return (
 		<StyledDisplayItem>
-			<DisplayItemImage> 
-				<img src={"/images/" + item.image} alt={item.name}/>
-			</DisplayItemImage>
-			<ItemInfo item={item}/>
-			<AddItemButton onClick={addItemClicked}/>
+			<ItemImage>
+				<img src={"/images/" + item.image} alt={item.name} />
+			</ItemImage>
+			<ItemInfo item={item} />
+			<AddItemButton onClick={addItemClicked} />
 		</StyledDisplayItem>
 	);
-}
+};
 export { DisplayItem };

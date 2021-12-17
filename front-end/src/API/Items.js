@@ -5,13 +5,12 @@ async function getAllItems() {
 		const data = await JSON.parse(json);
 
 		return data;
-	} catch(err) {
+	} catch (err) {
 		console.log("Error: Failed to fetch items");
 		console.log(err);
 
 		return null;
 	}
-
 }
 
-export {getAllItems}
+export { getAllItems };
